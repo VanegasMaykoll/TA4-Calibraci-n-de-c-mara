@@ -4,7 +4,7 @@
 **Tecnologías:** ROS 2 Humble, Python 3, OpenCV, NumPy, Matplotlib  
 **Hardware:** Cámara RGB-D Intel RealSense™ D435i  
 
-<img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/eaee7a5f-a879-421c-ac45-0ee0514d03aa" />
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/eaee7a5f-a879-421c-ac45-0ee0514d03aa" />
 
 ---
 
