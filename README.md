@@ -1,4 +1,4 @@
-# Práctica nº 4: Calibración de Cámara (DCCA / MCC)
+# Práctica 4: Calibración de Cámara (DCCA / MCC)
 ## Calibración Geométrica y Corrección de Distorsión con Intel RealSense™ D435i
 **Autor:** Maykoll Vanegas  
 **Tecnologías:** ROS 2 Humble, Python 3, OpenCV, NumPy, Matplotlib  
@@ -6,7 +6,7 @@
 
 ---
 
-## 1. 📖 Introducción y Fundamentos Teóricos
+## 1. Introducción y Fundamentos Teóricos
 
 La calibración de cámara es un paso fundamental en visión artificial y robótica móvil. Su propósito es estimar los parámetros ópticos internos (intrínsecos) y la posición espacial (extrínsecos) del sensor para mapear con precisión el mundo tridimensional en coordenadas de imagen bidimensionales.
 
@@ -31,7 +31,7 @@ En este proyecto, se implementó una solución **100% en Python y OpenCV** basad
 
 ---
 
-## 2. 🚀 Instrucciones de Ejecución
+## 2. Instrucciones de Ejecución
 
 ### 2.1. Clonar el Repositorio
 ```bash
@@ -63,7 +63,7 @@ python3 capturar_fotos.py
 - **[ESPACIO]** o **[C]**: Toma la foto (se guarda en `imagenes/foto_XX.png`).
 - **[Q]** o **[ESC]**: Salir antes de tiempo.
 
-> 💡 **Consejos Clave para una Calibración Exitosa:**
+> **Consejos Clave para una Calibración Exitosa:**
 > 1. **Superficie completamente plana y rígida:** Pega el papel impreso a un cartón grueso, tabla de madera o carpeta dura. Si la hoja se arquea o dobla en el aire, introducirá errores severos en la estimación de distorsión.
 > 2. **Variar ángulos e inclinaciones:** No tomes todas las fotos frontales. Inclina el tablero entre $15^\circ$ y $30^\circ$ en diferentes orientaciones (cabeceo, alabeo y diagonal) para desacoplar matemáticamente la distancia focal de la traslación en Z.
 > 3. **Cubrir todo el campo de visión:** Lleva el tablero hacia las 4 esquinas y los bordes del visor. Es en los extremos donde la lente exhibe mayor curvatura óptica y donde mejor se calibran los coeficientes $k_1$ y $k_2$.
@@ -78,7 +78,7 @@ El script procesará las 20 fotos con precisión subpíxel, resolverá los 3 eje
 
 ---
 
-## 3. 📊 Resultados Experimentales
+## 3. Resultados Experimentales
 
 ### 3.1. Detección de Esquinas Subpíxel
 De las 20 imágenes capturadas, **19 fueron detectadas y refinadas exitosamente** con el patrón de **$8 \times 6$ esquinas interiores** ($dX = dY = 30\text{ mm}$). La imagen `foto_16.png` fue descartada automáticamente por presentar el patrón incompleto fuera de los límites del sensor.
@@ -150,7 +150,7 @@ Con los coeficientes calculados, se rectificaron las imágenes mediante `cv2.und
 
 ---
 
-## 4. 📝 Conclusiones
+## 4. Conclusiones
 
 La calibración geométrica de la cámara RGB-D Intel RealSense D435i se completó con éxito utilizando un pipeline autónomo en Python y OpenCV, prescindiendo totalmente de herramientas privativas como MATLAB y logrando una precisión subpíxel de **0.733 píxeles** de error RMS. La comparación experimental demostró una concordancia excepcional con los datos de fábrica del sensor OmniVision OV2740 (discrepancia en distancia focal inferior al 1%), confirmando que el sensor posee píxeles isotrópicos y una respuesta óptica altamente predecible.
 
