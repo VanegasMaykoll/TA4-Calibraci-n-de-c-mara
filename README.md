@@ -4,6 +4,12 @@
 **Tecnologías:** ROS 2 Humble, Python 3, OpenCV, NumPy, Matplotlib  
 **Hardware:** Cámara RGB-D Intel RealSense™ D435i  
 
+<p align="center">
+  <img src="resultados/camara_realsense_d435i.jpg" width="55%" alt="Cámara Intel RealSense D435i" />
+  <br>
+  <em>Cámara RGB-D Intel RealSense™ D435i utilizada en la práctica experimental.</em>
+</p>
+
 ---
 
 ## 1. Introducción y Fundamentos Teóricos
@@ -108,7 +114,7 @@ $$\mathbf{K}_{calculada} = \begin{bmatrix} 600.1596 & 0.0000 & 261.7078 \\ 0.000
 #### Matriz Intrínseca Nominal del Fabricante ($\mathbf{K}_{real}$):
 $$\mathbf{K}_{fabricante} = \begin{bmatrix} 605.0000 & 0.0000 & 320.0000 \\ 0.0000 & 605.0000 & 240.0000 \\ 0.0000 & 0.0000 & 1.0000 \end{bmatrix}$$
 
-> **Análisis:** La distancia focal calculada converge extraordinariamente con las especificaciones del fabricante (error inferior al 1% en $f_x$). La relación $f_x / f_y \approx 1.013$ demuestra que las celdas fotosensibles del sensor CMOS son perfectamente cuadradas y que los ejes ópticos forman un ángulo ortogonal exacto de $90^\circ$ ($\alpha_c = 0$). El centro vertical $c_y = 242.36\text{ px}$ se alinea con una precisión del 0.98% respecto a la mitad del sensor ($240\text{ px}$), mientras que el desplazamiento en $c_x$ refleja el montaje físico del módulo RGB descentrado dentro del chasis de la RealSense.
+> **Análisis:** La distancia focal calculada converge con alta exactitud respecto a las especificaciones del fabricante (error inferior al 1% en $f_x$). La relación $f_x / f_y \approx 1.013$ corrobora que las celdas fotosensibles del sensor CMOS son cuadradas y que los ejes forman un ángulo ortogonal exacto de $90^\circ$ ($\alpha_c = 0$). El centro vertical $c_y = 242.36\text{ px}$ se alinea con una precisión del 0.98% respecto a la mitad nominal del sensor ($240\text{ px}$).
 
 ---
 
@@ -152,6 +158,6 @@ Con los coeficientes calculados, se rectificaron las imágenes mediante `cv2.und
 
 ## 4. Conclusiones
 
-La calibración geométrica de la cámara RGB-D Intel RealSense D435i se completó con éxito utilizando un pipeline autónomo en Python y OpenCV, prescindiendo totalmente de herramientas privativas como MATLAB y logrando una precisión subpíxel de **0.733 píxeles** de error RMS. La comparación experimental demostró una concordancia excepcional con los datos de fábrica del sensor OmniVision OV2740 (discrepancia en distancia focal inferior al 1%), confirmando que el sensor posee píxeles isotrópicos y una respuesta óptica altamente predecible.
+El análisis cuantitativo de los errores de reproyección demostró la alta sensibilidad de la optimización no lineal frente a observaciones extremas (*outliers*). En particular, la inclusión de una única muestra anómala (`foto_14.png`), capturada bajo una perspectiva forzada y con una inclinación oblicua excesiva, incrementó el error RMS global de **0.733 px a 1.122 px** (un incremento de más del 53% en el residuo de reproyección). La detección y exclusión sistemática de este fotograma en la fase de recalibración permitió reducir el error residual en un **34.6%**, demostrando que para una calibración robusta prima la calidad geométrica y la estabilidad angular de las esquinas sobre la cantidad pura de fotogramas procesados.
 
-Asimismo, la fase de rectificación comprobó la eficacia del modelo de Brown-Conrady al eliminar por completo la curvatura radial tipo barril en la periferia de la imagen, alineando perfectamente las líneas del patrón con las referencias geométricas rectilíneas. La obtención de estos parámetros calibrados es indispensable para garantizar mediciones métricas exactas en tareas de robótica móvil, tales como odometría visual, mapeo 3D y navegación autónoma en entornos estructurados.
+Por otro lado, la discrepancia del **18.21%** observada en el punto principal horizontal ($c_x = 261.71\text{ px}$ frente al valor teórico central de $320.0\text{ px}$) se fundamenta tanto en la arquitectura física del dispositivo como en el acoplamiento matemático del modelo. Físicamente, el sensor RGB (OmniVision OV2740) de la RealSense D435i no está ubicado en el centro del chasis sino desplazado asimétricamente hacia el extremo derecho respecto a los emisores y cámaras estéreo infrarrojas, y el modo de resolución 640×480 realiza un recorte (*cropping*) del sensor nativo 1080p que no necesariamente coincide con el centro mecánico de la carcasa. Asimismo, desde la formulación numérica de Brown-Conrady, existe una fuerte correlación entre las coordenadas del punto principal $(c_x, c_y)$ y el coeficiente de distorsión radial $k_1$, donde una distribución espacial de esquinas con mayor densidad en un hemisferio del encuadre desplaza naturalmente el vértice de simetría radial sin degradar la precisión geométrica de la rectificación final.
